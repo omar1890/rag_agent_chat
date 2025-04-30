@@ -12,8 +12,7 @@ This project demonstrates a full-stack AI chat interface that supports document 
 
 ## 🎥 Demo
 
-[![Watch Demo on YouTube]](https://youtu.be/0eF8omSNLSU))
-
+[![Watch Demo on YouTube](https://img.youtube.com/vi/0eF8omSNLSU/0.jpg)](https://youtu.be/0eF8omSNLSU)
 
 
 
