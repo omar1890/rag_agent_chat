@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.log
+*.sqlite3
+
+# Virtual environment
+venv/
+rag_venv/
+rag_venv_v2/
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# FastAPI auto reload cache
+*.mypy_cache/
+*.pytest_cache/

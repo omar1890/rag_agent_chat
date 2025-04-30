@@ -1,0 +1,189 @@
+# Scenario Name: DG_APH_01
+# Title: Account high velocity ATM withdrawals.
+
+## Scenario Metadata
+Category :		ATM/Phone activity (DG_APH)
+Frequency :	Daily 
+Business days:	10
+Subject: Account 
+
+## Descriptions
+Short description:	Account high velocity ATM withdrawals.
+Long description:	An account has a total amount of ATM withdrawals greater than a large percentage of deposits made in the same time period.
+Detailed description:	This scenario calculates the sum of ATM withdrawals and deposits during the specified time period. The scenario also calculates that account's sum of ATM withdrawals occurring since the earliest deposit date. If that sum meets or exceeds the specified percentage of deposits, a match is found.
+Dependent view(s):	DGINVEST_PARTY_ACCOUNT_TRANSACTIONS
+View level(s):	1 level
+Scenario message:	Total Deposits Amount= #1; Total ATM Withdrawals Amount=  #2
+Features used:	Normal
+Technical notes:	None
+
+
+## Parameters
+
+Name 	Description 	value
+APH_01_account_type_desc	List denoting valid types of accounts	P,C
+APH_01_atm_today	Minimum aggregate amount of withdrawals on the current day	0.1
+APH_01_deposit_trigger	Minimum aggregate credit amount	100000
+APH_01_pct_atm_deposit	Percentage of aggregate (Total ATM Withdrawals over Total deposits)	90
+APH_01_status_desc	List denoting completed transactions	SUCCESS
+APH_01_triggered_transaction	This Parameter must have value 'Y' for technical purposes	Y
+
+
+[
+    {
+        "routine": {
+            "routine_Id": 359,
+            "alarm_Categ_Cd": "DG_APH",
+            "alarm_Subcateg_Cd": "DEFAULT",
+            "alarm_Type_Cd": "AMLALR",
+            "create_Date": "2024-09-04T10:35:06.760+0300",
+            "create_User_Id": "aml_admin",
+            "current_Ind": "Y",
+            "dflt_Suppr_Dur_Count": 0,
+            "end_Date": "2024-09-04T10:35:06.760+0300",
+            "end_User_Id": null,
+            "exec_Prob_Rate": null,
+            "headerId": null,
+            "last_Update_Date": "2024-09-04T10:17:06.000+0300",
+            "last_Update_User_Id": null,
+            "logic_Del_Ind": "N",
+            "obj_Level_Cd": "ACC",
+            "order_In_Header": null,
+            "prim_Obj_No_Var_Name": null,
+            "prod_Type_Cd": "AML",
+            "risk_Fact_Ind": "N",
+            "rootKey": 158,
+            "route_Grp_Id": null,
+            "route_User_Long_Id": null,
+            "routine_Categ_Cd": "DG_APH",
+            "routine_Cd_Loc_Desc": null,
+            "routine_Desc": "An account has a total amount of ATM withdrawals greater than a large percentage of deposits made in the same time period.",
+            "routine_Dur_Count": 10,
+            "routine_Msg_Txt": "Total Deposits Amount= #1; Total ATM Withdrawals Amount=  #2",
+            "routine_Name": "DG_APH_01",
+            "routine_Run_Freq_Cd": "D",
+            "routine_Short_Desc": "High velocity ATM withdrawals.",
+            "routine_Status_Cd": "ACT",
+            "routine_Type_Cd": "CUS",
+            "save_Trig_Trans_Ind": null,
+            "skip_If_No_Trans_Ccy_Day_Ind": null,
+            "ver_No": 3,
+            "correspondingViewName": "DGINVEST_PARTY_ACCOUNT_TRANSACTIONS",
+            "comparedDateAttribute": "Date_Key",
+            "admin_status_cd": "ACA",
+            "orderParameterBracket": null,
+            "orderParameterCondition": null,
+            "username": null,
+            "ml_Bayes_Weight": 1,
+            "procedureName": null,
+            "isProcedure": null,
+            "vsd_Win_Name": null,
+            "vsd_Installation_Name": null,
+            "tf_Bayes_Weight": null
+        },
+        "routineParamters": [
+            {
+                "id": {
+                    "routine_Id": 359,
+                    "parm_Name": "APH_01_account_type_desc"
+                },
+                "parm_Desc": "List denoting valid types of accounts",
+                "parm_Type_Desc": "Char",
+                "parm_Value": "P,C",
+                "valueCate": "Itself",
+                "paramCondition": "Acct_Type_Desc IN ('P', 'C')",
+                "day_Type": "None",
+                "logicOperator": null
+            },
+            {
+                "id": {
+                    "routine_Id": 359,
+                    "parm_Name": "APH_01_atm_today"
+                },
+                "parm_Desc": "Minimum aggregate amount of withdrawals on the current day",
+                "parm_Type_Desc": "Numeric",
+                "parm_Value": "0.1",
+                "valueCate": "Itself",
+                "paramCondition": "Acct_No in (SELECT Acct_No FROM DGAMLCORE.DGINVEST_PARTY_ACCOUNT_TRANSACTIONS GROUP BY Acct_No HAVING SUM(  ATM_Withdrawals) >= 0.1)",
+                "day_Type": "CDAY",
+                "logicOperator": null
+            },
+            {
+                "id": {
+                    "routine_Id": 359,
+                    "parm_Name": "APH_01_deposit_trigger"
+                },
+                "parm_Desc": "Minimum aggregate credit amount",
+                "parm_Type_Desc": "Numeric",
+                "parm_Value": "100000",
+                "valueCate": "Itself",
+                "paramCondition": "Acct_No in (SELECT Acct_No FROM DGAMLCORE.DGINVEST_PARTY_ACCOUNT_TRANSACTIONS GROUP BY Acct_No HAVING SUM(  Deposits) >= 100000)",
+                "day_Type": "None",
+                "logicOperator": null
+            },
+            {
+                "id": {
+                    "routine_Id": 359,
+                    "parm_Name": "APH_01_pct_atm_deposit"
+                },
+                "parm_Desc": "Percentage of aggregate (Total ATM Withdrawals over Total deposits)",
+                "parm_Type_Desc": "Numeric",
+                "parm_Value": "90",
+                "valueCate": "Percentage",
+                "paramCondition": "Acct_No in ( select A.Acct_No FROM ( SELECT Acct_No, SUM(  ATM_Withdrawals) AS firstCOL FROM DGAMLCORE.DGINVEST_PARTY_ACCOUNT_TRANSACTIONS group by Acct_No) A inner join ( Select Acct_No, SUM(  Deposits) AS secondCOL  FROM DGAMLCORE.DGINVEST_PARTY_ACCOUNT_TRANSACTIONS group by Acct_No) B  ON  A.Acct_No = B.Acct_No WHERE A.firstCOL > B.secondCOL * 0.9)",
+                "day_Type": "None",
+                "logicOperator": null
+            },
+            {
+                "id": {
+                    "routine_Id": 359,
+                    "parm_Name": "APH_01_status_desc"
+                },
+                "parm_Desc": "List denoting completed transactions",
+                "parm_Type_Desc": "Char",
+                "parm_Value": "SUCCESS",
+                "valueCate": "Itself",
+                "paramCondition": "Status_Desc = 'SUCCESS'",
+                "day_Type": "None",
+                "logicOperator": null
+            },
+            {
+                "id": {
+                    "routine_Id": 359,
+                    "parm_Name": "APH_01_triggered_transaction"
+                },
+                "parm_Desc": "This Parameter must have value 'Y' for technical purposes",
+                "parm_Type_Desc": "Char",
+                "parm_Value": "Y",
+                "valueCate": "Itself",
+                "paramCondition": "triggered_trans = 'Y'",
+                "day_Type": "None",
+                "logicOperator": null
+            }
+        ],
+        "scoringRules": {
+            "rule_Id": 154,
+            "routine_Id": 359,
+            "parm_Name": "APH_01_atm_today",
+            "depend_Attribute": "SELECT SUM ( ATM_Withdrawals ) as score FROM DGAMLCORE.DGINVEST_PARTY_ACCOUNT_TRANSACTIONS"
+        },
+        "routineMessage": [
+            {
+                "id": {
+                    "routine_Id": 359,
+                    "corresponding_Loc": "#1"
+                },
+                "corresponding_Value": "SELECT SUM(Deposits) as col1 FROM DGAMLCORE.DGINVEST_PARTY_ACCOUNT_TRANSACTIONS",
+                "isDayType": false
+            },
+            {
+                "id": {
+                    "routine_Id": 359,
+                    "corresponding_Loc": "#2"
+                },
+                "corresponding_Value": "SELECT SUM(ATM_Withdrawals) as col1 FROM DGAMLCORE.DGINVEST_PARTY_ACCOUNT_TRANSACTIONS",
+                "isDayType": false
+            }
+        ]
+    }
+]
