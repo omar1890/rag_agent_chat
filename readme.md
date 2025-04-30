@@ -1,4 +1,3 @@
-```markdown
 # 🤖 ContextWise App with RAG + Agent Tools
 
 This project demonstrates a full-stack AI chat interface that supports document upload and contextual question answering using **Retrieval-Augmented Generation (RAG)** and **LangChain agents**. Responses are streamed token-by-token for a real-time ChatGPT-like experience.
