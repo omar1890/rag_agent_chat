@@ -13,6 +13,7 @@ rag_venv/
 rag_venv_v2/
 .env
 
+vector_db/
 # IDE
 .vscode/
 .idea/
